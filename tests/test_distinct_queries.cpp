@@ -3,6 +3,10 @@
 
 using namespace std;
 
+int brute_distinct(vector<int>& arr, int l, int r) {
+    return (int)set<int>(arr.begin() + l, arr.begin() + r + 1).size();
+}
+
 int run_tests() {
     // arr = [1, 2, 3, 2, 1]
     // Queries (0-indexed, inclusive):
@@ -25,6 +29,25 @@ int run_tests() {
     vector<int> ans2 = distinctQueries(4, 2, arr2, queries2);
     ASSERT_EQ(ans2[0], 1);
     ASSERT_EQ(ans2[1], 1);
+
+    // Stress test: n=500, q=200, large random values in [1, 1000000]
+    mt19937 rng(42);
+    int n = 500, q = 200;
+    vector<int> arr3(n);
+    for (int& x : arr3) x = rng() % 1000000 + 1;
+
+    vector<pair<int, int>> queries3(q);
+    for (auto& [l, r] : queries3) {
+        l = rng() % n;
+        r = rng() % n;
+        if (l > r) swap(l, r);
+    }
+
+    vector<int> arr3_copy = arr3;
+    vector<int> ans3 = distinctQueries(n, q, arr3_copy, queries3);
+
+    for (int i = 0; i < q; i++)
+        ASSERT_EQ(ans3[i], brute_distinct(arr3, queries3[i].first, queries3[i].second));
 
     TEST_PASS();
 }
