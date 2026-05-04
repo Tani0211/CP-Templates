@@ -4,9 +4,8 @@ A collection of competitive programming algorithm templates in C++. Each file is
 
 ## Usage
 
-1. Copy `TemplateStuff/Template.cpp` as your contest starting point.
-2. Find the algorithm you need in the relevant category folder.
-3. Copy the function or struct into your solution.
+1. Find the algorithm you need in the relevant category folder.
+2. Copy the function or struct into your solution.
 
 ## Testing
 

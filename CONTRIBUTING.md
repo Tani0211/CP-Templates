@@ -9,7 +9,7 @@
 2. **File requirements** — every algorithm file must be self-contained:
    - Include only the standard headers it needs (e.g. `<vector>`, `<queue>`).
    - Use explicit C++ types (`long long`, `int`) — no macros or typedefs from an external template.
-   - No `main()` function, no `using namespace std;`, no boilerplate.
+   - No `main()` function, no boilerplate.
    - Start with a comment block: algorithm name, time complexity, brief usage note.
 
 3. **Write a test file** at `tests/test_algorithmname.cpp`:
