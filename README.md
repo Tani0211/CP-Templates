@@ -2,12 +2,6 @@
 
 A collection of competitive programming algorithm templates in C++. Each file is self-contained — copy any function directly into your solution without needing external boilerplate.
 
-## Testing
-
-```bash
-make -C tests run
-```
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new algorithms and tests.
