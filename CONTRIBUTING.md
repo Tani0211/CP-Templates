@@ -7,7 +7,6 @@
    - Name it `AlgorithmName.cpp` using CamelCase.
 
 2. **File requirements** — every algorithm file must be self-contained:
-   - Include only the standard headers it needs (e.g. `<vector>`, `<queue>`).
    - Use explicit C++ types (`long long`, `int`) — no macros or typedefs from an external template.
    - No `main()` function, no boilerplate.
    - Start with a comment block: algorithm name, time complexity, brief usage note.
@@ -24,7 +23,7 @@
    ```
    All tests must pass.
 
-5. **Update `README.md`** — add a row to the appropriate table with the algorithm name, complexity, and description.
+5. **Update `README.md`** if you are adding a new category folder.
 
 ## Code Style
 
