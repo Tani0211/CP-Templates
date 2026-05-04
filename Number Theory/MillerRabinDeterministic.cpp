@@ -6,8 +6,8 @@ using namespace std;
 long long _mr_pow(long long a, long long b, long long mod) {
     long long res = 1;
     for (a %= mod; b > 0; b >>= 1) {
-        if (b & 1) res = (__int128)res * a % mod;
-        a = (__int128)a * a % mod;
+        if (b & 1) res = ((__int128)res * a) % mod;
+        a = ((__int128)a * a) % mod;
     }
     return res;
 }
@@ -16,7 +16,7 @@ bool _mr_composite(long long n, long long a, long long d, int s) {
     long long x = _mr_pow(a, d, n);
     if (x == 1 || x == n - 1) return false;
     for (int r = 1; r < s; r++) {
-        x = (__int128)x * x % n;
+        x = ((__int128)x * x) % n;
         if (x == n - 1) return false;
     }
     return true;
