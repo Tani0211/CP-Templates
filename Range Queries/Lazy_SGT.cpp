@@ -1,6 +1,6 @@
 // Lazy Segment Tree — O(N) build, O(log N) range update and range query
-// Customise Node1 (merge, identity) and Update1 (apply, combine, identity) for your problem.
-// Example below: range-assign with range-sum queries.
+// Supports multiple Segment Trees with just a change in Node and Update
+// Very few changes required each time
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -9,9 +9,10 @@ struct LazySGT {
     vector<Node> tree;
     vector<bool> lazy;
     vector<Update> updates;
-    int n, s;
+    int n;
+    int s;
 
-    LazySGT(int n, vector<long long>& a) {
+    LazySGT(int n, vector<long long>& a) { // change if type updated
         this->n = n;
         s = 1;
         while (s < 2 * n) s <<= 1;
@@ -21,7 +22,7 @@ struct LazySGT {
         _build(a, 0, n - 1, 1);
     }
 
-    void _build(vector<long long>& a, int l, int r, int idx) {
+    void _build(vector<long long>& a, int l, int r, int idx) { // Never change this
         if (l == r) { tree[idx] = Node(a[l]); return; }
         int m = (l + r) / 2;
         _build(a, l, m, 2 * idx);
@@ -29,12 +30,15 @@ struct LazySGT {
         tree[idx].merge(tree[2 * idx], tree[2 * idx + 1]);
     }
 
-    void _apply(int idx, int l, int r, Update& u) {
-        if (l != r) { lazy[idx] = true; updates[idx].combine(u, l, r); }
+    void _apply(int idx, int l, int r, Update& u) { // Never change this
+        if (l != r) {
+            lazy[idx] = true;
+            updates[idx].combine(u, l, r);
+        }
         u.apply(tree[idx], l, r);
     }
 
-    void _pushdown(int idx, int l, int r) {
+    void _pushdown(int idx, int l, int r) { // Never change this
         if (lazy[idx]) {
             int m = (l + r) / 2;
             _apply(2 * idx, l, m, updates[idx]);
@@ -44,7 +48,7 @@ struct LazySGT {
         }
     }
 
-    void _update(int l, int r, int idx, int ql, int qr, Update& u) {
+    void _update(int l, int r, int idx, int ql, int qr, Update& u) { // Never change this
         if (l > qr || r < ql) return;
         if (l >= ql && r <= qr) { _apply(idx, l, r, u); return; }
         _pushdown(idx, l, r);
@@ -54,7 +58,7 @@ struct LazySGT {
         tree[idx].merge(tree[2 * idx], tree[2 * idx + 1]);
     }
 
-    Node _query(int l, int r, int idx, int ql, int qr) {
+    Node _query(int l, int r, int idx, int ql, int qr) { // Never change this
         if (l > qr || r < ql) return Node();
         if (l >= ql && r <= qr) { _pushdown(idx, l, r); return tree[idx]; }
         _pushdown(idx, l, r);
@@ -66,8 +70,8 @@ struct LazySGT {
         return ans;
     }
 
-    void make_update(int l, int r, long long val) {
-        Update u(val);
+    void make_update(int l, int r, long long val) { // pass in as many parameters as required
+        Update u(val); // may change
         _update(0, n - 1, 1, l, r, u);
     }
 
@@ -78,15 +82,29 @@ struct LazySGT {
 
 // Example: range-assign update, range-sum query
 struct Node1 {
-    long long val = 0;
-    Node1() = default;
-    Node1(long long v) : val(v) {}
-    void merge(const Node1& l, const Node1& r) { val = l.val + r.val; }
+    long long val; // may change
+    Node1() { // Identity element
+        val = 0; // may change
+    }
+    Node1(long long v) { // Actual Node
+        val = v; // may change
+    }
+    void merge(Node1& l, Node1& r) { // Merge two child nodes
+        val = l.val + r.val; // may change
+    }
 };
 struct Update1 {
-    long long val = 0;
-    Update1() = default;
-    Update1(long long v) : val(v) {}
-    void apply(Node1& a, int l, int r) { a.val = val * (r - l + 1); }
-    void combine(const Update1& newer, int /*l*/, int /*r*/) { val = newer.val; }
+    long long val; // may change
+    Update1() { // Identity update
+        val = 0; // may change
+    }
+    Update1(long long v) { // Actual Update
+        val = v; // may change
+    }
+    void apply(Node1& a, int l, int r) { // apply update to given node
+        a.val = val * (r - l + 1); // may change
+    }
+    void combine(Update1& newer, int l, int r) { // combine with incoming update
+        val = newer.val; // may change
+    }
 };
