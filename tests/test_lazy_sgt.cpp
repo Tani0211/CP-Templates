@@ -1,13 +1,8 @@
 #include "common.h"
+#include "range_utils.h"
 #include "../Range Queries/Lazy_SGT.cpp"
 
 using namespace std;
-
-long long brute_sum(vector<long long>& a, int l, int r) {
-    long long res = 0;
-    for (int i = l; i <= r; i++) res += a[i];
-    return res;
-}
 
 int run_tests() {
     // --- Small test: [1, 2, 3, 4, 5], range-assign, range-sum ---
@@ -20,7 +15,7 @@ int run_tests() {
 
         // Assign [1,3] = 10 → [1, 10, 10, 10, 5]
         sgt.make_update(1, 3, 10);
-        for (int i = 1; i <= 3; i++) a[i] = 10;
+        range_assign(a, 1, 3, 10);
         ASSERT_EQ(sgt.make_query(0, 4).val, brute_sum(a, 0, 4));
         ASSERT_EQ(sgt.make_query(1, 3).val, brute_sum(a, 1, 3));
         ASSERT_EQ(sgt.make_query(0, 0).val, brute_sum(a, 0, 0));
@@ -28,7 +23,7 @@ int run_tests() {
 
         // Assign entire array = 3
         sgt.make_update(0, 4, 3);
-        for (int i = 0; i <= 4; i++) a[i] = 3;
+        range_assign(a, 0, 4, 3);
         ASSERT_EQ(sgt.make_query(0, 4).val, brute_sum(a, 0, 4));
         ASSERT_EQ(sgt.make_query(2, 4).val, brute_sum(a, 2, 4));
     }
@@ -39,10 +34,10 @@ int run_tests() {
         LazySGT<Node1, Update1> sgt(1, a);
         ASSERT_EQ(sgt.make_query(0, 0).val, brute_sum(a, 0, 0));
         sgt.make_update(0, 0, 100);
-        a[0] = 100;
+        range_assign(a, 0, 0, 100);
         ASSERT_EQ(sgt.make_query(0, 0).val, brute_sum(a, 0, 0));
         sgt.make_update(0, 0, 0);
-        a[0] = 0;
+        range_assign(a, 0, 0, 0);
         ASSERT_EQ(sgt.make_query(0, 0).val, brute_sum(a, 0, 0));
     }
 
@@ -52,7 +47,7 @@ int run_tests() {
         LazySGT<Node1, Update1> sgt(6, a);
         ASSERT_EQ(sgt.make_query(0, 5).val, brute_sum(a, 0, 5));
         sgt.make_update(2, 4, 5);
-        for (int i = 2; i <= 4; i++) a[i] = 5;
+        range_assign(a, 2, 4, 5);
         ASSERT_EQ(sgt.make_query(0, 5).val, brute_sum(a, 0, 5));
         ASSERT_EQ(sgt.make_query(2, 4).val, brute_sum(a, 2, 4));
         ASSERT_EQ(sgt.make_query(0, 1).val, brute_sum(a, 0, 1));
@@ -64,9 +59,9 @@ int run_tests() {
         vector<long long> a(5, 0);
         LazySGT<Node1, Update1> sgt(5, a);
         sgt.make_update(0, 4, 10);
-        for (int i = 0; i <= 4; i++) a[i] = 10;
+        range_assign(a, 0, 4, 10);
         sgt.make_update(1, 3, 20);
-        for (int i = 1; i <= 3; i++) a[i] = 20;
+        range_assign(a, 1, 3, 20);
         // array = [10, 20, 20, 20, 10]
         ASSERT_EQ(sgt.make_query(0, 4).val, brute_sum(a, 0, 4));
         ASSERT_EQ(sgt.make_query(0, 0).val, brute_sum(a, 0, 0));
@@ -79,14 +74,14 @@ int run_tests() {
         vector<long long> a(8, 1);
         LazySGT<Node1, Update1> sgt(8, a);
         sgt.make_update(0, 7, 5);
-        for (int i = 0; i <= 7; i++) a[i] = 5;
+        range_assign(a, 0, 7, 5);
         ASSERT_EQ(sgt.make_query(0, 7).val, brute_sum(a, 0, 7));
         sgt.make_update(2, 5, 3);
-        for (int i = 2; i <= 5; i++) a[i] = 3;
+        range_assign(a, 2, 5, 3);
         ASSERT_EQ(sgt.make_query(0, 7).val, brute_sum(a, 0, 7));
         ASSERT_EQ(sgt.make_query(2, 5).val, brute_sum(a, 2, 5));
         sgt.make_update(0, 7, 7);
-        for (int i = 0; i <= 7; i++) a[i] = 7;
+        range_assign(a, 0, 7, 7);
         ASSERT_EQ(sgt.make_query(0, 7).val, brute_sum(a, 0, 7));
         ASSERT_EQ(sgt.make_query(3, 3).val, brute_sum(a, 3, 3));
     }
@@ -97,7 +92,7 @@ int run_tests() {
         LazySGT<Node1, Update1> sgt(8, a);
         ASSERT_EQ(sgt.make_query(0, 7).val, brute_sum(a, 0, 7));
         sgt.make_update(4, 7, 0);
-        for (int i = 4; i <= 7; i++) a[i] = 0;
+        range_assign(a, 4, 7, 0);
         ASSERT_EQ(sgt.make_query(0, 7).val, brute_sum(a, 0, 7));
         ASSERT_EQ(sgt.make_query(4, 7).val, brute_sum(a, 4, 7));
         ASSERT_EQ(sgt.make_query(0, 3).val, brute_sum(a, 0, 3));
@@ -109,7 +104,7 @@ int run_tests() {
         LazySGT<Node1, Update1> sgt(7, a);
         for (long long v = 1; v <= 10; v++) {
             sgt.make_update(0, 6, v);
-            for (int i = 0; i <= 6; i++) a[i] = v;
+            range_assign(a, 0, 6, v);
             ASSERT_EQ(sgt.make_query(0, 6).val, brute_sum(a, 0, 6));
         }
     }
@@ -119,13 +114,13 @@ int run_tests() {
         vector<long long> a(5, 0);
         LazySGT<Node1, Update1> sgt(5, a);
         sgt.make_update(2, 2, 99);
-        a[2] = 99;
+        range_assign(a, 2, 2, 99);
         ASSERT_EQ(sgt.make_query(2, 2).val, brute_sum(a, 2, 2));
         ASSERT_EQ(sgt.make_query(0, 4).val, brute_sum(a, 0, 4));
         sgt.make_update(0, 0, 1);
-        a[0] = 1;
+        range_assign(a, 0, 0, 1);
         sgt.make_update(4, 4, 1);
-        a[4] = 1;
+        range_assign(a, 4, 4, 1);
         ASSERT_EQ(sgt.make_query(0, 4).val, brute_sum(a, 0, 4));
     }
 
@@ -143,7 +138,7 @@ int run_tests() {
             if (l > r) swap(l, r);
             if (rng() % 2 == 0) {
                 long long val = rng() % 1000;
-                for (int i = l; i <= r; i++) a[i] = val;
+                range_assign(a, l, r, val);
                 sgt.make_update(l, r, val);
             } else {
                 long long got = sgt.make_query(l, r).val;
