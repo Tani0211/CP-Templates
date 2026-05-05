@@ -35,7 +35,7 @@ struct SparseTable {
         return ans;
     }
 
-    // For idempotent operations (e.g. min, max, gcd): O(1)
+    // For idempotent operations (e.g. min, max): O(1)
     Node queryIdempotent(int l, int r) { // Never change this
         int j = logVal[r - l + 1];
         Node ans;
