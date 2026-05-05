@@ -1,12 +1,8 @@
 #include "common.h"
+#include "range_utils.h"
 #include "../Range Queries/Mo_algo.cpp"
 
 using namespace std;
-
-int brute_distinct(vector<int>& arr, int l, int r) {
-    set<int> s(arr.begin() + l, arr.begin() + r + 1);
-    return (int)s.size();
-}
 
 int run_tests() {
     // --- Small test: [1, 2, 3, 2, 1, 4, 3] ---
