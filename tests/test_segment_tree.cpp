@@ -1,13 +1,8 @@
 #include "common.h"
+#include "range_utils.h"
 #include "../Range Queries/Segment_tree.cpp"
 
 using namespace std;
-
-long long brute_sum(vector<long long>& a, int l, int r) {
-    long long res = 0;
-    for (int i = l; i <= r; i++) res += a[i];
-    return res;
-}
 
 int run_tests() {
     // --- Small test: [1, 2, 3, 4, 5], sum merge, point-set update ---
