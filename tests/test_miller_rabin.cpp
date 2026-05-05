@@ -21,8 +21,8 @@ int run_tests() {
     ASSERT_FALSE(MillerRabin(100));
     ASSERT_FALSE(MillerRabin(1000000006));
 
-    // Large prime
-    ASSERT_TRUE(MillerRabin((__int128)1e18 + 9));
+    // Large prime (10^18 + 9)
+    ASSERT_TRUE(MillerRabin(1000000000000000009LL));
 
     TEST_PASS();
 }
