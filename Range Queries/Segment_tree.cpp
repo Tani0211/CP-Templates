@@ -1,15 +1,16 @@
 // Segment Tree — O(N) build, O(log N) point update and range query
-// Customise Node1 (merge logic, identity) and Update1 (apply logic) for your problem.
-// Example below: XOR with point-set updates.
+// Supports multiple Segment Trees with just a change in Node and Update
+// Very few changes required each time
 #include <bits/stdc++.h>
 using namespace std;
 
 template<typename Node, typename Update>
 struct SegTree {
     vector<Node> tree;
-    int n, s;
+    int n;
+    int s;
 
-    SegTree(int n, vector<long long>& a) {
+    SegTree(int n, vector<long long>& a) { // change if type updated
         this->n = n;
         s = 1;
         while (s < 2 * n) s <<= 1;
@@ -17,7 +18,7 @@ struct SegTree {
         _build(a, 0, n - 1, 1);
     }
 
-    void _build(vector<long long>& a, int l, int r, int idx) {
+    void _build(vector<long long>& a, int l, int r, int idx) { // Never change this
         if (l == r) { tree[idx] = Node(a[l]); return; }
         int m = (l + r) / 2;
         _build(a, l, m, 2 * idx);
@@ -25,7 +26,7 @@ struct SegTree {
         tree[idx].merge(tree[2 * idx], tree[2 * idx + 1]);
     }
 
-    void _update(int l, int r, int idx, int pos, Update& u) {
+    void _update(int l, int r, int idx, int pos, Update& u) { // Never change this
         if (l == r) { u.apply(tree[idx]); return; }
         int m = (l + r) / 2;
         if (pos <= m) _update(l, m, 2 * idx, pos, u);
@@ -33,7 +34,7 @@ struct SegTree {
         tree[idx].merge(tree[2 * idx], tree[2 * idx + 1]);
     }
 
-    Node _query(int l, int r, int idx, int ql, int qr) {
+    Node _query(int l, int r, int idx, int ql, int qr) { // Never change this
         if (l > qr || r < ql) return Node();
         if (l >= ql && r <= qr) return tree[idx];
         int m = (l + r) / 2;
@@ -44,8 +45,8 @@ struct SegTree {
         return ans;
     }
 
-    void make_update(int pos, long long val) {
-        Update u(val);
+    void make_update(int pos, long long val) { // pass in as many parameters as required
+        Update u(val); // may change
         _update(0, n - 1, 1, pos, u);
     }
 
@@ -54,15 +55,25 @@ struct SegTree {
     }
 };
 
-// Example: XOR aggregate, point-set update
+// Example: sum aggregate, point-set update
 struct Node1 {
-    long long val = 0;  // identity for XOR
-    Node1() = default;
-    Node1(long long v) : val(v) {}
-    void merge(const Node1& l, const Node1& r) { val = l.val ^ r.val; }
+    long long val; // may change
+    Node1() { // Identity element
+        val = 0; // may change
+    }
+    Node1(long long v) { // Actual Node
+        val = v; // may change
+    }
+    void merge(Node1& l, Node1& r) { // Merge two child nodes
+        val = l.val + r.val; // may change
+    }
 };
 struct Update1 {
-    long long val;
-    Update1(long long v) : val(v) {}
-    void apply(Node1& a) { a.val = val; }
+    long long val; // may change
+    Update1(long long v) { // Actual Update
+        val = v; // may change
+    }
+    void apply(Node1& a) { // apply update to given node
+        a.val = val; // may change
+    }
 };
