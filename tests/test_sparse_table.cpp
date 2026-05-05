@@ -1,13 +1,8 @@
 #include "common.h"
+#include "range_utils.h"
 #include "../Range Queries/Sparse_Table.cpp"
 
 using namespace std;
-
-long long brute_xor(vector<long long>& a, int l, int r) {
-    long long res = 0;
-    for (int i = l; i <= r; i++) res ^= a[i];
-    return res;
-}
 
 // Min node for idempotent queryIdempotent tests
 struct NodeMin {
@@ -16,12 +11,6 @@ struct NodeMin {
     NodeMin(long long v) : val(v) {}
     void merge(const NodeMin& l, const NodeMin& r) { val = min(l.val, r.val); }
 };
-
-long long brute_min(vector<long long>& a, int l, int r) {
-    long long res = LLONG_MAX;
-    for (int i = l; i <= r; i++) res = min(res, a[i]);
-    return res;
-}
 
 int run_tests() {
     // --- Small test: [3, 1, 4, 1, 5, 9, 2, 6], XOR (non-idempotent) ---
